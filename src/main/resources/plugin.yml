@@ -1,0 +1,9 @@
+name: SoccerSystem
+version: '${version}'
+main: soccerplugin.soccersystem.SoccerSystem
+authors: [ BackdevHong ]
+description: 축구 시스템
+website: https://github.com/backdevhong
+commands:
+  game:
+    description: 축구 게임을 위한 명령어입니다. /game으로 도움말을 보실 수 있습니다.
