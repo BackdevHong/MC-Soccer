@@ -7,8 +7,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 import soccerplugin.soccersystem.SoccerSystem;
 import soccerplugin.soccersystem.bar.Bar;
+import soccerplugin.soccersystem.bar.ScoreSetting;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +20,8 @@ import java.util.Collection;
 
 public class GameCommand implements CommandExecutor {
     private Bar bar;
+    private ScoreSetting scoreSetting;
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
@@ -29,9 +35,11 @@ public class GameCommand implements CommandExecutor {
                     if (bar == null) {
                         Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l 게임이 시작하였습니다!");
                         bar = new Bar();
+                        scoreSetting = new ScoreSetting();
                         bar.createBar();
-                        for(Player p : Bukkit.getServer().getOnlinePlayers()) {
+                        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                             bar.addPlayer(p);
+                            scoreSetting.addPLayers(p);
                         }
                         return true;
                     } else {
@@ -47,6 +55,7 @@ public class GameCommand implements CommandExecutor {
                     } else {
                         Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l 게임이 종료되었습니다!");
                         bar.removeBar();
+                        scoreSetting.removeScore();
                         bar = null;
                         return true;
                     }
@@ -67,6 +76,53 @@ public class GameCommand implements CommandExecutor {
                             player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 올바르지 않은 팀입니다.");
                             return false;
                         }
+                    }
+                } else if (args[0].equalsIgnoreCase("Yellow")) {
+                    if (!args[1].isEmpty()) {
+                        if (bar == null) {
+                            Player player = (Player) sender;
+                            player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 게임이 시작되어 있지 않습니다.");
+                            return false;
+                        } else {
+                            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                                if (p == Bukkit.getPlayer(args[1])) {
+                                    if (scoreSetting.getScore(p) == 0) {
+                                        scoreSetting.setScore(p);
+                                        Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l " + args[1] + " " + "플레이어 옐로우카드! 한장만 더 받으면 퇴장합니다!");
+                                    } else {
+                                        scoreSetting.redCard(p);
+                                        Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l "+ args[1] + " " + "플레이어 경고누적으로 퇴장합니다!");
+                                    }
+                                } else {
+                                    Player player = (Player) sender;
+                                    player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 올바르지 않은 닉네임입니다.");
+                                }
+                            }
+                        }
+                    } else {
+                        Player player = (Player) sender;
+                        player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 닉네임을 적어주세요!");
+                    }
+                } else if (args[0].equalsIgnoreCase("Red")) {
+                    if (!args[1].isEmpty()) {
+                        if (bar == null) {
+                            Player player = (Player) sender;
+                            player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 게임이 시작되어 있지 않습니다.");
+                            return false;
+                        } else {
+                            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                                if (p == Bukkit.getPlayer(args[1])) {
+                                    scoreSetting.redCard(p);
+                                    Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l " + "" + args[1] + "플레이어 레드카드! 퇴장합니다!");
+                                } else {
+                                    Player player = (Player) sender;
+                                    player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 올바르지 않은 닉네임입니다.");
+                                }
+                            }
+                        }
+                    } else {
+                        Player player = (Player) sender;
+                        player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 닉네임을 적어주세요!");
                     }
                 }
             }
