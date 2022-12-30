@@ -63,9 +63,13 @@ public class GameCommand implements CommandExecutor {
                             player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 게임이 시작되어 있지 않습니다.");
                             return false;
                         } else {
-                            if (args[1].equalsIgnoreCase("RED") || args[1].equalsIgnoreCase("Blue")) {
-                                if (args[2].equalsIgnoreCase("PLUS") || args[2].equalsIgnoreCase("Minus")) {
-                                    Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l " + "" + args[1] + "팀! 1점 " + args[2]);
+                            if (args[1].equalsIgnoreCase("RED") || args[1].equalsIgnoreCase("레드")) {
+                                if(args[2].equalsIgnoreCase("Plus")) {
+                                    Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l " + "" + args[1] + "팀! 1점 획득!");
+                                    bar.addScore(args[1], args[2]);
+                                    return true;
+                                } else if (args[2].equalsIgnoreCase("Minus")) {
+                                    Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l " + "" + args[1] + "팀! 1점 차감!");
                                     bar.addScore(args[1], args[2]);
                                     return true;
                                 }
