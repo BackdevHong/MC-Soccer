@@ -1,6 +1,7 @@
 package soccerplugin.soccersystem.command;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -99,6 +100,9 @@ public class GameCommand implements CommandExecutor {
                             bar.removeBar();
                             scoreSetting.removeScore();
                             bar = null;
+                            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                                p.setGameMode(GameMode.SURVIVAL);
+                            }
                             return true;
                         }
                     } else if (args[0].equalsIgnoreCase("score")) {
@@ -121,18 +125,16 @@ public class GameCommand implements CommandExecutor {
                                 player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 게임이 시작되어 있지 않습니다.");
                                 return false;
                             } else {
-                                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                                    if (p == Bukkit.getPlayer(args[1])) {
-                                        if (scoreSetting.getScore(p) == 0) {
-                                            scoreSetting.setScore(p);
-                                            Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l " + args[1] + " " + "플레이어 옐로우카드! 한장만 더 받으면 퇴장합니다!");
-                                        } else {
-                                            scoreSetting.redCard(p);
-                                            Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l " + args[1] + " " + "플레이어 경고누적으로 퇴장합니다!");
-                                        }
+                                if (Bukkit.getPlayer(args[1]).isOnline()) {
+                                    if (scoreSetting.getScore(Bukkit.getPlayer(args[1])) == 0) {
+                                        scoreSetting.setScore(Bukkit.getPlayer(args[1]));
+                                        Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l " + args[1] + " " + "플레이어 옐로우카드! 한장만 더 받으면 퇴장합니다!");
                                     } else {
-                                        player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 올바르지 않은 닉네임입니다.");
+                                        scoreSetting.redCard(Bukkit.getPlayer(args[1]));
+                                        Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l " + args[1] + " " + "플레이어 경고누적으로 퇴장합니다!");
                                     }
+                                } else {
+                                    player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 올바르지 않은 닉네임입니다.");
                                 }
                             }
                         } else {
@@ -144,13 +146,11 @@ public class GameCommand implements CommandExecutor {
                                 player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 게임이 시작되어 있지 않습니다.");
                                 return false;
                             } else {
-                                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                                    if (p == Bukkit.getPlayer(args[1])) {
-                                        scoreSetting.redCard(p);
-                                        Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l " + "" + args[1] + "플레이어 레드카드! 퇴장합니다!");
-                                    } else {
-                                        player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 올바르지 않은 닉네임입니다.");
-                                    }
+                                if (Bukkit.getPlayer(args[1]).isOnline()) {
+                                    scoreSetting.redCard(Bukkit.getPlayer(args[1]));
+                                    Bukkit.broadcastMessage("§e§l[§c§l Soccer§e§l ]§f§l " + "" + args[1] + " 플레이어 레드카드! 퇴장합니다!");
+                                } else {
+                                    player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 올바르지 않은 닉네임입니다.");
                                 }
                             }
                         } else {

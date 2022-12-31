@@ -2,6 +2,7 @@ package soccerplugin.soccersystem.bar;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
@@ -31,7 +32,8 @@ public class ScoreSetting {
 
     public void redCard(Player player) {
         score = objective.getScore(player);
-        score.setScore(0);
+        scoreboard.resetScores(player);
+        player.setGameMode(GameMode.SPECTATOR);
     }
     public int getScore(Player player) {
         getPScore = objective.getScore(player);
