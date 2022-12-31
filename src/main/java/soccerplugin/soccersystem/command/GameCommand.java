@@ -31,6 +31,7 @@ public class GameCommand implements CommandExecutor {
                             "/Game Stop - 게임을 종료합니다.\n" +
                             "/Game Score [팀이름] [Plus / Minus] - 해당 팀의 스코어를 관리합니다.\n" +
                             "/Game [Yellow / Red] [닉네임] - 옐로우 카드와 레드카드를 지급합니다.\n" +
+                            "/Game Clear - 옐로우 카드를 받은 사람들의 리스트를 초기화 시킵니다." +
                             "이 플러그인은 BackdevHong(뙈지몬/홍인성)이 제작한 플러그인입니다. 2차 배포, 2차 판매를 금지합니다.");
                     return true;
                 } else {
@@ -78,6 +79,10 @@ public class GameCommand implements CommandExecutor {
                                                         bar.addPlayer(p);
                                                         scoreSetting.addPLayers(p);
                                                     }
+                                                    return true;
+                                                } else {
+                                                    player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 게임이 이미 시작되었습니다.");
+                                                    return false;
                                                 }
                                             }
                                         }
@@ -153,6 +158,12 @@ public class GameCommand implements CommandExecutor {
                         }
                     } else if (args[0].equalsIgnoreCase("color")) {
                         player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l Black, Blue, Green, BlueGreen, Red, Purple, Gold, Silver, DarkSilver, LightBlue, LightGreen, SkyBlue, LightRed, Pink, Yellow, White");
+                    } else if (args[0].equalsIgnoreCase("clear")) {
+                        player.sendMessage("§e§l[§c§l Soccer§e§l ]§f§l 옐로우 카드 리스트를 초기화하였습니다.");
+                        scoreSetting = new ScoreSetting();
+                        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                            scoreSetting.addPLayers(p);
+                        }
                     }
                 }
             } else {
