@@ -29,7 +29,7 @@ public class GameCommand implements CommandExecutor {
                             "/Game Start [팀1] [팀1 색깔] [팀2] [팀2 색깔] - 게임을 시작합니다.\n" +
                             "팀 컬러 종류는 /Game Color 으로 확인할 수 있습니다." +
                             "/Game Stop - 게임을 종료합니다.\n" +
-                            "/Game Score [Red / Blue] [Plus / Minus] - 레드팀과 블루팀에 스코어를 관리합니다.\n" +
+                            "/Game Score [팀이름] [Plus / Minus] - 해당 팀의 스코어를 관리합니다.\n" +
                             "/Game [Yellow / Red] [닉네임] - 옐로우 카드와 레드카드를 지급합니다.\n" +
                             "이 플러그인은 BackdevHong(뙈지몬/홍인성)이 제작한 플러그인입니다. 2차 배포, 2차 판매를 금지합니다.");
                     return true;
